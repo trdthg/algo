@@ -40,5 +40,4 @@ func BubbleSortV2(array []int, begin, end int) {
 			return
 		}
 	}
-
 }
