@@ -49,3 +49,19 @@ func InsertSort3(arr []int) {
 		}
 	}
 }
+
+func InsertSort3V2(arr []int, begin, end int) {
+	if begin > end || end >= len(arr) {
+		return
+	}
+	for i := begin + 1; i < end+1; i++ {
+		// 对某一组进行插入排序
+		// i = 1, j = 0 0和1比较 j-1 结束
+		// i = 2, j = 1 1和2比较 j-1 0和1比较 ... 结束
+		// ...  , j = 2 2和3比较 ... 1和2比较 ... 0和1比较 ... 结束
+		// ...
+		for j := i - 1; j >= begin && arr[j+1] < arr[j]; j -= 1 {
+			arr[j], arr[j+1] = arr[j+1], arr[j]
+		}
+	}
+}

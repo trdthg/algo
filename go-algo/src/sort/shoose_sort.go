@@ -15,3 +15,19 @@ func ChooseSort(array []int) {
 		array[i], array[min] = array[min], array[i]
 	}
 }
+
+func ChooseSortV2(array []int, begin, end int) {
+	if begin > end || end >= len(array) {
+		return
+	}
+	for i := begin; i < end+1; i++ {
+		min := i
+		// 找到它之后最小的和自己交换位置
+		for j := i + 1; j < end+1; j++ {
+			if array[min] > array[j] {
+				min = j
+			}
+		}
+		array[i], array[min] = array[min], array[i]
+	}
+}
