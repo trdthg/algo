@@ -5,10 +5,9 @@ import (
 	"testing"
 )
 
-func TestQuickSort(t *testing.T) {
+func TestRotation(t *testing.T) {
 	arr := Arr
 	fmt.Println(arr)
-	QuickSort_v5(arr, 0, len(arr)-1)
+	Rotation(arr, 0, len(arr)/2, len(arr))
 	fmt.Println(arr)
-
 }

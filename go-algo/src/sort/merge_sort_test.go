@@ -6,10 +6,17 @@ import (
 )
 
 // 全部sort
-func TestMergeSort(t *testing.T) {
+func TestMergeSortTtob(t *testing.T) {
 	arr := Arr
 	fmt.Println(arr)
-	MergeSort(arr)
+	MergeSortTtob(arr, 0, len(arr))
+	fmt.Println(arr)
+}
+
+func TestMergeSortBtot(t *testing.T) {
+	arr := Arr
+	fmt.Println(arr)
+	MergeSortBtot(arr, 0, len(arr))
 	fmt.Println(arr)
 }
 
@@ -17,6 +24,6 @@ func TestMergeSort(t *testing.T) {
 func TestMergeSortPartial(t *testing.T) {
 	arr := Arr
 	fmt.Println(arr)
-	// mergeSort(arr)
+	MergeSortByBlockReverse(arr, 0, len(arr))
 	fmt.Println(arr)
 }

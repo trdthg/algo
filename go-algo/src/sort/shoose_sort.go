@@ -17,13 +17,13 @@ func ChooseSort(array []int) {
 }
 
 func ChooseSortV2(array []int, begin, end int) {
-	if begin > end || end >= len(array) {
+	if begin > end || end > len(array) {
 		return
 	}
-	for i := begin; i < end+1; i++ {
+	for i := begin; i < end; i++ {
 		min := i
 		// 找到它之后最小的和自己交换位置
-		for j := i + 1; j < end+1; j++ {
+		for j := i + 1; j < end; j++ {
 			if array[min] > array[j] {
 				min = j
 			}

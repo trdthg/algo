@@ -24,11 +24,19 @@ func QuickSort_v2(arr []int, begin, end int) {
 	}
 }
 
-func QuickSort_v3(arr []int, begin, end int) {
+func QuickSort_v4(arr []int, begin, end int) {
 	if begin < end {
-		ll, rl := partition_4(arr, begin, end)
+		loc := partition_4(arr, begin, end)
+		QuickSort(arr, begin, loc-1)
+		QuickSort(arr, loc+1, end)
+	}
+}
+
+func QuickSort_v5(arr []int, begin, end int) {
+	if begin < end {
+		ll, lr := partition_5(arr, begin, end)
 		QuickSort(arr, begin, ll-1)
-		QuickSort(arr, rl+1, end)
+		QuickSort(arr, lr+1, end)
 	}
 }
 
@@ -74,7 +82,8 @@ func partition_2(arr []int, begin, end int) int {
 	return l
 }
 
-// 真交换法
+// 真交换法，左右同时推进
+// if l > pivot && r < pivot { swap(l, r) }
 func partition_3(arr []int, begin, end int) int {
 	// arr[begin]是基准
 	pivot := arr[begin]
@@ -100,8 +109,8 @@ func partition_3(arr []int, begin, end int) int {
 	return l
 }
 
-// 三向切分
-func partition_4(arr []int, begin, end int) (int, int) {
+// 三向取中, 优化了寻找pivot的方法
+func partition_4(arr []int, begin, end int) int {
 	// arr[begin]是基准
 	mid := (begin + end) / 2
 	l, r := begin, end
@@ -132,5 +141,28 @@ func partition_4(arr []int, begin, end int) (int, int) {
 	}
 	// 哨兵和l换位
 	arr[r], arr[l] = arr[l], arr[r]
-	return l, 1
+	return l
+}
+
+// 三向切分, 类似第一种，大的全部放到右边，小的全部放到左边，等于的就mid++
+// 但是左右边界指针不移动，等于的都聚在中间，这样中间的就不用重新排序
+func partition_5(arr []int, begin, end int) (int, int) {
+	l, r := begin, end
+	mid := begin + 1
+	pivot := arr[begin]
+	// 以中间坐标为准
+	for mid <= r {
+		if arr[mid] > pivot { // 大于基准数，那么交换，右指针左移
+			arr[mid], arr[r] = arr[r], arr[mid]
+			r--
+		} else if arr[mid] < pivot { // 小于基准数，那么交换，左指针右移
+			arr[mid], arr[l] = arr[l], arr[mid]
+			l++
+			mid++
+		} else {
+			mid++
+		}
+	}
+
+	return l, r
 }

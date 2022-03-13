@@ -22,14 +22,14 @@ func BubbleSort(array []int) {
 }
 
 func BubbleSortV2(array []int, begin, end int) {
-	if begin > end || end >= len(array) {
+	if begin > end || end > len(array) {
 		return
 	}
 	swapped := false
-	for i := begin; i < end+1; i++ {
+	for i := begin; i < end; i++ {
 		swapped = false
 		// 每一轮中最大的一定会被排到末尾，下一轮就能少比较一次
-		for j := begin; j < end-i; j++ {
+		for j := begin; j < end-i-1; j++ {
 			if array[j] > array[j+1] {
 				array[j], array[j+1] = array[j+1], array[j]
 				swapped = true
