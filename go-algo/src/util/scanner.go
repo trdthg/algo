@@ -1,8 +1,12 @@
 package util
 
 import (
+	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
+	"os"
+	"strings"
 )
 
 type Sc interface {
@@ -15,14 +19,30 @@ type ReaderScanner struct {
 	reader io.Reader
 }
 
-func NewReaderScanner(reader io.Reader) ReaderScanner {
-	return ReaderScanner{reader}
+func NewReaderScanner(reader io.Reader) *ReaderScanner {
+	return &ReaderScanner{reader}
+}
+
+func NewReader() *io.Reader {
+	filePath := flag.String("f", "test.txt", "test input's file path")
+	flag.Parse()
+	str, err := ioutil.ReadFile(*filePath)
+	var reader io.Reader
+	if err != nil {
+		fmt.Printf("[WARN] 没有找到测试文件 '%s', 请用户手动输入\n", *filePath)
+		reader = os.Stdin
+	} else {
+		reader = strings.NewReader(string(str))
+	}
+	return &reader
 }
 
 func (rs *ReaderScanner) ReadInt() (res int, err error) {
 	_, err = fmt.Fscan(rs.reader, &res)
 	if err != nil {
-		ExitWithMsg(1, "输入格式错误(int)")
+		// ExitWithMsg(1, "输入格式错误(int)")
+		fmt.Print("输入格式错误(int), 请重新输入: ")
+		return rs.ReadInt()
 	}
 	return
 }
@@ -35,7 +55,9 @@ func (rs *ReaderScanner) ReadIntWithMsg(msg string) (res int, err error) {
 func (rs *ReaderScanner) ReadString() (res string, err error) {
 	_, err = fmt.Fscan(rs.reader, &res)
 	if err != nil {
-		ExitWithMsg(1, "输入格式错误(string)")
+		// ExitWithMsg(1, "输入格式错误(string)")
+		fmt.Print("输入格式错误(string), 请重新输入: ")
+		return rs.ReadString()
 	}
 	return
 }
@@ -58,7 +80,9 @@ func (rs *ReaderScanner) read(a []interface{}) (err error) {
 			fmt.Printf("unsupported type: %V\n", v)
 		}
 		if err != nil {
-			ExitWithMsg(1, "输入格式错误")
+			// ExitWithMsg(1, "输入格式错误")
+			fmt.Print("输入格式错误, 请重新输入: ")
+			return rs.read(a)
 		}
 	}
 	return

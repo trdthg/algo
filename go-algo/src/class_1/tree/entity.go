@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type Major struct {
 	id   int
 	name string
@@ -42,6 +44,27 @@ type Org struct {
 }
 
 type students []*Student
+
+func (ss students) FindByTreePlanted(n int) (index int, cnt int) {
+	len := ss.Len()
+	l, mid, r := 0, len/2, len
+	index, cnt = -1, 0
+	for l < r {
+		fmt.Println(l, r)
+		cnt += 1
+		tmp := int(ss[mid].tree_planted_num)
+		if n < tmp {
+			r = mid - 1
+		} else if n == tmp {
+			index = mid
+			return
+		} else {
+			l = mid + 1
+		}
+		mid = (l + r) / 2
+	}
+	return
+}
 
 func (ss students) Len() int {
 	return len(ss)

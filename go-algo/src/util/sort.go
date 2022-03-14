@@ -57,13 +57,15 @@ func InsertSort(s Sortable, begin, end int) {
 
 func QuickSort(s Sortable, begin, end int) {
 	if begin < end {
-		ll, rl := partition()
+		loc := partition(s, begin, end)
+		QuickSort(s, begin, loc-1)
+		QuickSort(s, loc+1, end)
 	}
 }
 
-func partition(s Sortable, begin, end int) (int, int) {
-	mid := (begin + end) / 2
-	l, r := begin, end
+func partition(s Sortable, begin, end int) int {
+	mid := (begin + end - 1) / 2
+	l, r := begin, end-1
 	// find the biggest
 	if s.Less(r, l) {
 		s.Swap(l, r)
@@ -71,10 +73,21 @@ func partition(s Sortable, begin, end int) (int, int) {
 	if s.Less(r, mid) {
 		s.Swap(r, mid)
 	}
-	// sort the lower two
+	// sort the lower two, 把较大的(起始就是中间大小的)放到开头
 	if s.Less(l, mid) {
-		s.Swap(l, mid)
+		s.Swap(mid, l)
 	}
-	
-
+	for l < r {
+		for l < r && s.Less(l, begin) {
+			l += 1
+		}
+		for l < r && s.Less(begin, r) {
+			r -= 1
+		}
+		if l < r {
+			s.Swap(l, r)
+		}
+	}
+	s.Swap(begin, l)
+	return l
 }

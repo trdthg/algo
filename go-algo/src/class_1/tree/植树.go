@@ -12,14 +12,27 @@ import (
 )
 
 func solution(reader io.Reader) {
-	org := getInput(reader)
+	sc := util.NewReaderScanner(reader)
+	org := getInput(sc)
 	fmt.Println(org.students)
-	util.Sort(ByTreePlanted{org.students}, util.BubbleSort)
-	fmt.Println(org.students)
+	// util.Sort(ByTreePlanted{org.students}, util.BubbleSort)
+	// util.Sort(ByTreePlanted{org.students}, util.InsertSort)
+	util.Sort(ByTreePlanted{org.students}, util.QuickSort)
+	for _, s := range org.students {
+		fmt.Println(s.tree_planted_num)
+	}
+	num, _ := sc.ReadIntWithMsg("请输入植树数量: ")
+	index, cnt := org.students.FindByTreePlanted(num)
+	if index != -1 {
+		s := org.students[index]
+		fmt.Printf("该生排名在第%d位, 查找%d次成功, %s %s %s %d", index+1, cnt, s.major.name, s.id, s.name, s.tree_planted_num)
+	} else {
+		fmt.Printf("查询失败, 没有种植数量为%d的学生", num)
+	}
 	util.ExitWithMsg(0, "正常退出")
 }
 
-func main() {
+func TestTreePlanting() {
 	filePath := flag.String("f", "test.txt", "test input's file path")
 	flag.Parse()
 	str, err := ioutil.ReadFile(*filePath)
@@ -33,8 +46,7 @@ func main() {
 	solution(reader)
 }
 
-func getInput(reader io.Reader) *Org {
-	sc := util.NewReaderScanner(reader)
+func getInput(sc *util.ReaderScanner) *Org {
 	var org = Org{groups: []*Group{}, students: []*Student{}}
 	major_num, _ := sc.ReadIntWithMsg("请输入专业数量: ")
 	for i := 0; i < major_num; i++ {
