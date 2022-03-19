@@ -49,7 +49,7 @@ func BubbleSort(s Sortable, begin, end int) {
 
 func InsertSort(s Sortable, begin, end int) {
 	for i := begin + 1; i < end; i++ {
-		for j := i - 1; j >= begin && s.Less(j+1, j); j-- {
+		for j := i - 1; j >= begin && s.Less(j, j+1); j-- {
 			s.Swap(j+1, j)
 		}
 	}

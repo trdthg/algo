@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 type Major struct {
 	id   int
 	name string
@@ -50,7 +48,6 @@ func (ss students) FindByTreePlanted(n int) (index int, cnt int) {
 	l, mid, r := 0, len/2, len
 	index, cnt = -1, 0
 	for l < r {
-		fmt.Println(l, r)
 		cnt += 1
 		tmp := int(ss[mid].tree_planted_num)
 		if n < tmp {
@@ -80,6 +77,10 @@ type ByTreePlanted struct {
 	students
 }
 
-func (b ByTreePlanted) Less(i, j int) bool {
-	return b.students[i].tree_planted_num < b.students[j].tree_planted_num
+type ByNameLen struct {
+	students
+}
+
+func (b ByNameLen) Less(i, j int) bool {
+	return len(b.students[i].name) < len(b.students[j].name)
 }

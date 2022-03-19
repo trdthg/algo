@@ -16,10 +16,10 @@ func solution(reader io.Reader) {
 	org := getInput(sc)
 	fmt.Println(org.students)
 	// util.Sort(ByTreePlanted{org.students}, util.BubbleSort)
-	// util.Sort(ByTreePlanted{org.students}, util.InsertSort)
 	util.Sort(ByTreePlanted{org.students}, util.QuickSort)
+	// util.Sort(ByTreePlanted{org.students}, util.InsertSort)
 	for _, s := range org.students {
-		fmt.Println(s.tree_planted_num)
+		fmt.Println(s.name, s.tree_planted_num)
 	}
 	num, _ := sc.ReadIntWithMsg("请输入植树数量: ")
 	index, cnt := org.students.FindByTreePlanted(num)
@@ -32,7 +32,7 @@ func solution(reader io.Reader) {
 	util.ExitWithMsg(0, "正常退出")
 }
 
-func TestTreePlanting() {
+func main() {
 	filePath := flag.String("f", "test.txt", "test input's file path")
 	flag.Parse()
 	str, err := ioutil.ReadFile(*filePath)

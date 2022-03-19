@@ -1,0 +1,1 @@
+{"name":"Local: bubble_sort","url":"/home/trdthg/repo/myproject/algo/bubble_sort.rs","tests":[{"id":1647402467096,"input":"","output":"hello"},{"id":1647402620541,"input":"hello2","output":"hello"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/trdthg/repo/myproject/algo/bubble_sort.rs","group":"local","local":true}
