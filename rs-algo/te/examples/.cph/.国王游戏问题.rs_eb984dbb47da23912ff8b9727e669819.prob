@@ -1,0 +1,1 @@
+{"name":"Local: 国王游戏问题","url":"/home/trdthg/myproject/algo/rs-algo/te/examples/国王游戏问题.rs","tests":[{"id":1648199953502,"input":"3\n1 1\n2 3\n7 4\n4 6","output":"2"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/trdthg/myproject/algo/rs-algo/te/examples/国王游戏问题.rs","group":"local","local":true}
