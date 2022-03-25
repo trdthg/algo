@@ -1,0 +1,1 @@
+{"name":"Local: test","url":"/home/trdthg/myproject/algo/rs-algo/test.rs","tests":[{"id":1648125581044,"input":"2\n1\n1","output":"[1, 1]"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/trdthg/myproject/algo/rs-algo/test.rs","group":"local","local":true}

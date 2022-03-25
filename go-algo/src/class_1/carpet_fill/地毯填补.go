@@ -3,17 +3,15 @@ package main
 import (
 	"fmt"
 	"math"
-
-	"github.com/trdthg/algo/go-algo/src/util"
 )
 
 func main() {
-	sc := util.NewReaderScanner(*util.NewReader())
+	sc := NewReaderScanner(*NewReader())
 	n, _ := sc.ReadIntWithMsg("请输入迷宫大小k(0< k <=10): ")
 	n = int(math.Pow(2, float64(n)))
 	x, _ := sc.ReadIntWithMsg("请输入公主所在位置x, y: ")
 	y, _ := sc.ReadInt()
-	a := util.NewMatrix(n, n)
+	a := NewMatrix(n, n)
 	fmt.Println(x, y, n)
 	solve(a, x-1, y-1, 0, 0, n)
 }
