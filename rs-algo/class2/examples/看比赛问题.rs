@@ -4,7 +4,7 @@
 /// 输入：第 1 行是 1 个整数 n；
 /// 接下来 n 行，每行 2 个整数 ai、bi，表示比赛开始、结束的时间。
 ///
-/// 思路: 把比赛按照结束时间排序
+/// 思路：把比赛按照结束时间排序
 fn main() {
     let reader = std::io::stdin();
     let mut sc = Scanner::new(reader.lock());

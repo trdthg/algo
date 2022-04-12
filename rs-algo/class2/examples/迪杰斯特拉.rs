@@ -1,52 +1,64 @@
-/// 问题描述: n 个村庄之间的交通图用无向加权图表示
-/// 图中的无向边（vi，vj）表示第 i 个村庄和第 j 个村庄之间有道路，边上的权表示这条道路的长度
-/// 从这 n 个村庄中选择一个村庄建一所医院
-/// 问这所医院应建在哪个村庄，才能使
-/// - 离医院最远的村庄到医院最近
-/// - 所有村庄到医院的路径和最短
 fn main() {
     let reader = std::io::stdin();
     let mut sc = Scanner::new(reader.lock());
     let n = sc.scan::<usize>(); // 村庄数
     let m = sc.scan::<usize>(); // 道路数
     let mut map: Vec<Vec<u32>> = vec![vec![500; n]; n]; // 构建地图, 不连通的是-1
-                                                        // 获取用户输入
     (0..m).for_each(|_| {
+        // 获取用户输入
         let x = sc.scan::<usize>() - 1;
         let y = sc.scan::<usize>() - 1;
         let weight = sc.scan::<u32>();
         map[x][y] = weight;
-        map[y][x] = weight; // 是无向图
     });
-    // 对角线设为0
+    // 设为0
     (0..n).for_each(|i| map[i][i] = 0);
-    println!("{:?}", map);
     // floyd计算最短路径
     solve(&mut map);
-    println!("{:?}", map);
-    // 各个最远路径
-    let maxs: Vec<&u32> = map.iter().map(|x| x.iter().max().unwrap()).collect();
-    // 最近的最远路径
-    let min = maxs.iter().min().unwrap();
-    // 处理重复
-    maxs.iter().enumerate().for_each(|(i, x)| {
-        if x == min {
-            println!("{}", i + 1)
-        }
-    });
 }
 
-// 建在那里
 fn solve(map: &mut Vec<Vec<u32>>) {
-    let len = map.len();
-    for k in 0..len {
-        for x in 0..len {
-            for y in 0..len {
-                if map[x][k] + map[k][y] < map[x][y] {
-                    map[x][y] = map[x][k] + map[k][y]
-                }
+    // todo
+    let init = 0;
+    // 已经加入的顶点
+    let mut joined_vertex = vec![false; map.len()];
+    joined_vertex[init] = true;
+    // 顶点i的前驱节点
+    let mut prev_vertex = vec![0; map.len()];
+    // 顶点距离其他点的距离
+    let mut dist_from_init = map[init].clone();
+
+    for i in 1..map.len() {
+        let mut min = u32::MAX;
+        let mut ready_for_join = init;
+        for v in 0..map.len() {
+            if joined_vertex[v] == true {
+                continue;
+            }
+            if dist_from_init[v] < min {
+                min = dist_from_init[v];
+                ready_for_join = v;
             }
         }
+        joined_vertex[ready_for_join] = true;
+
+        for i in 0..map.len() {
+            if joined_vertex[i] == true {
+                continue;
+            }
+            let tmp = if map[init][i] == u32::MAX {
+                u32::MAX
+            } else {
+                min + map[init][i]
+            };
+            if tmp < dist_from_init[i] {
+                dist_from_init[i] = tmp;
+                prev_vertex[i] = ready_for_join;
+            }
+        }
+    }
+    for i in 0..map.len() {
+        println!("0 {} {}", i, dist_from_init[i]);
     }
 }
 

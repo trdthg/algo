@@ -7,21 +7,24 @@
 ///     第二行 n 个数字 wi，表示第 i 堆果子质量为 wi。
 /// 输出：一个数字，表示最小需花费的体力值。
 ///
-/// 通过栈实现哈夫曼编码
+/// 通过栈相加
 
 fn main() {
     let reader = std::io::stdin();
     let mut sc = Scanner::new(reader.lock());
     let n = sc.scan::<u32>();
     let mut weights: Vec<u32> = (0..n).map(|_| sc.scan()).collect();
-    // 倒序排列，方便pop, push
+
+    // 倒序排列，方便pop, push 9 3 1
     weights.sort_by(|a, b| b.cmp(a));
+
     let mut sum = 0;
     while weights.len() != 1 {
         let x = weights.pop().unwrap();
         let y = weights.pop().unwrap();
         sum += x + y;
         weights.push(x + y);
+        weights.sort_by(|a, b| b.cmp(a));
     }
     println!("{}", sum);
 }
