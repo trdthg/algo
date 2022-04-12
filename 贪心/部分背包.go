@@ -17,8 +17,7 @@ import (
 
 func main() {
 	sc := NewScanner()
-	// n, m := sc.GetMatrix()
-	n, m := sc.GetVec()
+	n, m := sc.GetMatrix()
 	fmt.Println(n, m)
 }
 
@@ -81,9 +80,6 @@ func (s *Scanner) GetMatrix() (int, [][]int) {
 	n := 0
 	n = s.NextInt()
 	arr := make([][]int, n)
-	for i := range arr {
-		arr[i] = make([]int, n)
-	}
 	for i := 0; i < n; i++ {
 		for j := 0; j < n; j++ {
 			arr[i][j] = s.NextInt()
