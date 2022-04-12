@@ -20,7 +20,7 @@ func main() {
 	sort.Slice(arr, func(i, j int) bool {
 		return arr[i] < arr[j]
 	})
-	fmt.Println(arr[0])
+	fmt.Println(n, arr[0])
 }
 
 type Scanner struct {
