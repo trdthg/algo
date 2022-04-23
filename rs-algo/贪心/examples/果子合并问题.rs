@@ -15,7 +15,7 @@ fn main() {
     let n = sc.scan::<u32>();
     let mut weights: Vec<u32> = (0..n).map(|_| sc.scan()).collect();
 
-    // 倒序排列，方便pop, push 9 3 1
+    // 倒序排列，方便 pop, push 9 3 1
     weights.sort_by(|a, b| b.cmp(a));
 
     let mut sum = 0;
@@ -25,6 +25,30 @@ fn main() {
         sum += x + y;
         weights.push(x + y);
         weights.sort_by(|a, b| b.cmp(a));
+    }
+    println!("{}", sum);
+}
+
+fn _main2() {
+    let reader = std::io::stdin();
+    let mut sc = Scanner::new(reader.lock());
+    let n = sc.scan::<u32>();
+    let mut weights = &mut (0..n).map(|_| sc.scan()).collect::<Vec<u32>>()[..];
+
+    // 1 2 9
+    weights.sort_by(|a, b| a.cmp(b));
+
+    let mut sum = 0;
+    while weights.len() > 1 {
+        sum += weights[0] + weights[1];
+        weights[1] = sum;
+        weights = weights.split_at_mut(1).1;
+        weights.sort_by(|a, b| a.cmp(b));
+        // let mut index = 0;
+        // while index < weights.len() - 1 && weights[index] > weights[index + 1] {
+        //     weights.swap(index, index + 1);
+        //     index += 1;
+        // }
     }
     println!("{}", sum);
 }

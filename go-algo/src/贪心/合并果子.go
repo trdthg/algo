@@ -1,24 +1,44 @@
-// 藏宝洞里面有 N(N≤100) 堆金币，
-// 第 i 堆金币的总重量和总价值分别是 m_i,v_i (1≤m i ​ ,v i ​ ≤100)。
-// 阿里巴巴有一个承重量为 T(T≤1000) 的背包，
-// 但并不一定有办法将全部的金币都装进去。
-// 他想装走尽可能多价值的金币。
-// 所有金币都可以随意分割，分割完的金币重量价值比（也就是单位价格）不变。
-// 请问阿里巴巴最多可以拿走多少价值的金币？
 package main
 
 import (
 	"bufio"
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
 
 func main() {
 	sc := NewScanner()
-	n, m := sc.GetMatrix()
-	fmt.Println(n, m)
+	n := sc.NextInt()
+	m := make([]int, n)
+	for i := range m {
+		m[i] = sc.NextInt()
+	}
+	if n == 1 {
+		fmt.Println(m[0])
+		return
+	} else if n == 2 {
+		fmt.Println(m[1] + m[0])
+		return
+	}
+	sort.Slice(m, func(i, j int) bool {
+		return m[i] < m[j]
+	})
+	sum := 0
+	for len(m) > 1 {
+		sum_ := m[0] + m[1]
+		sum += sum_
+		m[1] = sum_
+		m = m[1:]
+
+		index := 0
+		for ; index < len(m)-1 && m[index] > m[index+1]; index++ {
+			m[index], m[index+1] = m[index+1], m[index]
+		}
+	}
+	fmt.Println(sum)
 }
 
 type Scanner struct {
