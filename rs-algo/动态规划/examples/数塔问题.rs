@@ -8,7 +8,9 @@ fn main() {
         .map(|i| (0..i).map(|_| sc.scan()).collect())
         .collect::<Vec<Vec<i32>>>();
     // 2. 确定递推公式
+
     // dp[i][j] = dp[i - 1][j] + dp[i - 1][j - 1]
+    
     // 3. 初始化
     // dp[i][j] 表示到第 i 层第 j 个位置的最高价值
     let mut dp = vec![vec![0; m + 1]; m + 1];
@@ -22,6 +24,7 @@ fn main() {
             dp[i][j] = dp[i - 1][j].max(dp[i - 1][j - 1]) + wv[i - 1][j - 1];
         }
     }
+
     println!("{:?}", dp[m].iter().max().unwrap());
 }
 

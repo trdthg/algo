@@ -1,38 +1,43 @@
-use std::io::BufRead;
-
 fn main() {
     let reader = std::io::stdin();
     let mut sc = Scanner::new(reader);
-    let m = sc.scan::<i32>();
-    let n = sc.scan::<i32>();
-    let mut arr = (0..n).map(|_| sc.scan::<i32>()).collect();
-    let res = solve(&mut arr, m);
-    println!("{res}");
+    let s = sc.scan::<usize>();
+    let nums = (0..s).map(|_| sc.scan()).collect::<Vec<i32>>();
+    let res = solve(&nums);
+    println!("{:?}", res);
 }
 
-fn solve(nums: &mut Vec<i32>, target: i32) -> usize {
-    let mut p1 = 0;
-    for i in 0..nums.len() {
-        if !nums[i].eq(&target) {
-            nums[p1] = nums[i];
-            p1 += 1;
-        }
+fn solve(nums: &Vec<i32>) -> Vec<Vec<i32>> {
+    let mut res = vec![];
+    let mut path = vec![];
+    backtracing(&nums, 0, &mut res, &mut path);
+    res
+}
+
+// 1. 函数的参数和返回值
+fn backtracing(nums: &Vec<i32>, start_index: usize, res: &mut Vec<Vec<i32>>, path: &mut Vec<i32>) {
+    res.push(path.clone());
+    if start_index == nums.len() {
+        return;
     }
-    p1
+    for i in start_index..nums.len() {
+        println!("{:?} {}", &path, nums[i]);
+        path.push(nums[i]);
+        backtracing(nums, i + 1, res, path);
+        path.pop();
+    }
 }
 
 #[cfg(test)]
 mod test {
-    use crate::solve;
+    use super::solve;
 
     #[test]
     fn it_dhould_return_ok() {
-        assert_eq!(solve(&mut vec![1, 2, 3, 4, 2, 2, 10], 2), 4);
+        assert_eq!(2 * 2, 4);
     }
     #[test]
-    fn it_should_return_err() {
-        assert_eq!(solve(&mut vec![1, 2, 3, 4, 7, 9, 10], 2), 6);
-    }
+    fn it_should_return_err() {}
 }
 
 struct Scanner<'a> {
@@ -56,7 +61,7 @@ impl<'a> Scanner<'a> {
                 return s.parse().ok().unwrap();
             } else {
                 self.buf.clear();
-                self.reader.read_line(&mut self.buf).unwrap();
+                std::io::BufRead::read_line(&mut self.reader, &mut self.buf).unwrap();
                 self.buffer = unsafe { std::mem::transmute(self.buf.split_ascii_whitespace()) };
             }
         }

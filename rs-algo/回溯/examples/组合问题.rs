@@ -3,35 +3,54 @@ use std::io::BufRead;
 fn main() {
     let reader = std::io::stdin();
     let mut sc = Scanner::new(reader);
-    let m = sc.scan::<i32>();
-    let n = sc.scan::<i32>();
-    let mut arr = (0..n).map(|_| sc.scan::<i32>()).collect();
-    let res = solve(&mut arr, m);
-    println!("{res}");
+    let n = sc.scan::<usize>();
+    let k = sc.scan::<usize>();
+    // 4 2
+    // 1 2 3 4 -> [1 2, 1 3, 1 4, 2 3, 2 4, 3 4]
+    let res = solve(n, k);
+    println!("{:?}", res);
 }
 
-fn solve(nums: &mut Vec<i32>, target: i32) -> usize {
-    let mut p1 = 0;
-    for i in 0..nums.len() {
-        if !nums[i].eq(&target) {
-            nums[p1] = nums[i];
-            p1 += 1;
-        }
+fn solve(n: usize, k: usize) -> Vec<Vec<usize>> {
+    let mut other = Other {
+        res: vec![],
+        path: vec![],
+    };
+    backtracing(n, k, 1, &mut other);
+    other.res
+}
+
+struct Other {
+    res: Vec<Vec<usize>>,
+    path: Vec<usize>,
+}
+
+// 1. 函数的参数和返回值
+fn backtracing(n: usize, k: usize, start_index: usize, other: &mut Other) {
+    if other.path.len() == k {
+        other.res.push(other.path.clone());
     }
-    p1
+    if n + other.path.len() - start_index < k {
+        return;
+    }
+    for i in start_index..=n {
+        other.path.push(i);
+        backtracing(n, k, i + 1, other);
+        other.path.pop();
+    }
 }
 
 #[cfg(test)]
 mod test {
-    use crate::solve;
+    use super::solve;
 
     #[test]
     fn it_dhould_return_ok() {
-        assert_eq!(solve(&mut vec![1, 2, 3, 4, 2, 2, 10], 2), 4);
+        assert_eq!(solve(vec![1, 2, 3, 4, 7, 9, 10], 2), 1);
     }
     #[test]
     fn it_should_return_err() {
-        assert_eq!(solve(&mut vec![1, 2, 3, 4, 7, 9, 10], 2), 6);
+        assert_eq!(solve(vec![1, 2, 3, 4, 7, 9, 10], 8), -1);
     }
 }
 
