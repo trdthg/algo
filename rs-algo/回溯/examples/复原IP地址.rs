@@ -1,3 +1,4 @@
+#![allow(non_snake_case)]
 static ZERO: char = '0';
 
 fn main() {
