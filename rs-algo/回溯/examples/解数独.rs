@@ -1,3 +1,15 @@
+// 3
+// 5 3 L
+// 6 L L
+// L 9 8
+
+// 6
+// 5 3 L L 7 L
+// 6 L L 1 9 5
+// L 9 8 L L L
+// 8 L L L 6 L
+// 4 L L 8 L 3
+// 7 L L L 2 L
 #![allow(unused)]
 fn main() {
     let reader = std::io::stdin();

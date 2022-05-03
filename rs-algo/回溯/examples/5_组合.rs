@@ -1,53 +1,42 @@
-// 3
-// 1 2 2
-//
-// [[], [1], [1, 2], [1, 2, 2], [2], [2, 2]]
+/// 已知数组 A[0…N-1]，给定某数值 sum，找出数组中的若干个数，使得这些数的和为 sum
 fn main() {
     let reader = std::io::stdin();
     let mut sc = Scanner::new(reader);
-    let s = sc.scan::<usize>();
-    let nums = (0..s).map(|_| sc.scan()).collect::<Vec<i32>>();
-    let res = solve(&nums);
+    let n = sc.scan::<i32>();
+    // let nums = (0..n).map(|_| sc.scan()).collect();
+    let nums = (0..n).map(|i| i).collect();
+    println!("{:?}", nums);
+    let sum = sc.scan::<i32>();
+    let res = solve(&nums, sum);
     println!("{:?}", res);
 }
 
-fn solve(nums: &Vec<i32>) -> Vec<Vec<i32>> {
-    let mut res = vec![];
-    let mut path = vec![];
-    backtracing(&nums, 0, &mut res, &mut path);
-    res
+fn solve(nums: &Vec<i32>, sum: i32) -> Vec<Vec<i32>> {
+    let mut other = Other {
+        res: vec![],
+        path: vec![],
+    };
+    backtracing(&nums, sum, 0, &mut other);
+    other.res
+}
+
+struct Other {
+    res: Vec<Vec<i32>>,
+    path: Vec<i32>,
 }
 
 // 1. 函数的参数和返回值
-fn backtracing(nums: &Vec<i32>, start_index: usize, res: &mut Vec<Vec<i32>>, path: &mut Vec<i32>) {
-    res.push(path.clone());
-    if start_index == nums.len() {
+fn backtracing(nums: &Vec<i32>, sum: i32, start_index: usize, other: &mut Other) {
+    if other.path.iter().sum::<i32>() == sum {
+        other.res.push(other.path.clone());
         return;
     }
     for i in start_index..nums.len() {
-        // 只需要在这里添加去重即可
-        if i > start_index && nums[i] == nums[i - 1] {
-            continue;
-        }
-        // println!("{:?} {}", &path, nums[i]);
-        path.push(nums[i]);
-        backtracing(nums, i + 1, res, path);
-        path.pop();
+        other.path.push(nums[i]);
+        backtracing(nums, sum, i + 1, other);
+        other.path.pop();
     }
 }
-
-#[cfg(test)]
-mod test {
-    use super::solve;
-
-    #[test]
-    fn it_dhould_return_ok() {
-        assert_eq!(2 * 2, 4);
-    }
-    #[test]
-    fn it_should_return_err() {}
-}
-
 struct Scanner<'a> {
     reader: std::io::BufReader<std::io::Stdin>,
     buffer: std::str::SplitAsciiWhitespace<'a>,

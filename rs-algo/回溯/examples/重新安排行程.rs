@@ -3,6 +3,11 @@ use std::{
     collections::{BTreeMap, HashMap},
 };
 
+// 3
+// JFK KUL
+// JFK NRT
+// NRT JFK
+// [["JFK", "NRT", "JFK", "KUL"]]
 fn main() {
     let reader = std::io::stdin();
     let mut sc = Scanner::new(reader);

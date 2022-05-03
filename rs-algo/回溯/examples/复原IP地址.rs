@@ -1,6 +1,10 @@
 #![allow(non_snake_case)]
 static ZERO: char = '0';
-
+// 25525511135
+// 0000
+// 1111
+// 010010
+// 101023
 fn main() {
     let reader = std::io::stdin();
     let mut sc = Scanner::new(reader);

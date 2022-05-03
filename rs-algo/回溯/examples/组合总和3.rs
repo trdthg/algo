@@ -2,6 +2,10 @@
 /// 组合中只允许含有 1 - 9 的正整数，并且每种组合中不存在重复的数字。
 use std::io::BufRead;
 
+// 3 7
+// [[1, 2, 4]]
+// 3 9
+// [[1, 2, 6], [1, 3, 5], [2, 3, 4]]
 fn main() {
     let reader = std::io::stdin();
     let mut sc = Scanner::new(reader);

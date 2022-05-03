@@ -1,5 +1,15 @@
 #![allow(non_snake_case)]
 
+// 4
+// ['L', 'Q', 'L', 'L']
+// ['L', 'L', 'L', 'Q']
+// ['Q', 'L', 'L', 'L']
+// ['L', 'L', 'Q', 'L']
+
+// ['L', 'L', 'Q', 'L']
+// ['Q', 'L', 'L', 'L']
+// ['L', 'L', 'L', 'Q']
+// ['L', 'Q', 'L', 'L']
 fn main() {
     let reader = std::io::stdin();
     let mut sc = Scanner::new(reader);

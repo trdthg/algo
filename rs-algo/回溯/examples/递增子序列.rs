@@ -1,5 +1,13 @@
 use std::collections::HashSet;
+// 3
+// 4 7 6
+//
+// [[4, 7], [4, 6]]
 
+// 4
+// 4 7 6 7
+//
+// [[4, 7], [4, 7, 7], [4, 6], [4, 6, 7], [7, 7], [6, 7]]
 fn main() {
     let reader = std::io::stdin();
     let mut sc = Scanner::new(reader);

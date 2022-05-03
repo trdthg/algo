@@ -3,6 +3,17 @@
 /// candidates 中的数字可以无限制重复被选取。
 use std::io::BufRead;
 
+// 7
+// 10 1 2 7 6 1 5
+// 8
+//
+// [[1, 1, 6], [1, 2, 5], [1, 7], [2, 6]]
+
+// 5
+// 2 5 2 1 2
+// 5
+
+// [[1, 2, 2], [5]]
 fn main() {
     let reader = std::io::stdin();
     let mut sc = Scanner::new(reader);
