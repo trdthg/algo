@@ -36,12 +36,14 @@ fn backtracing(
     start_index: usize,
     other: &mut Other,
 ) {
-    if current_weight <= max_weight {
-        if *max_value < current_value {
-            *max_value = current_value;
-        }
-        other.res.push(other.path.clone());
+    if current_weight > max_weight {
+        return;
     }
+    if current_value >= *max_value {
+        *max_value = current_value;
+    }
+    other.res.push(other.path.clone());
+
     for i in start_index..stuffs.len() {
         other.path.push(i);
         backtracing(
