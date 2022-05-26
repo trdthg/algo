@@ -73,13 +73,11 @@ fn main() {
     });
 }
 
-fn dfs(map: &mut Map, p: usize, to: Vec<usize>) {
-
-}
+fn dfs(map: &mut Map, p: usize, to: Vec<usize>) {}
 
 fn devide(map: &mut Map) {
     for p in map {
-        dfs(map, p.1 .1, p.1 .3);
+        // dfs(map, p.1 .1, p.1 .3);
     }
 }
 fn solve(m: usize, map: &mut Map) -> Vec<(Vec<usize>, usize, usize)> {

@@ -6,10 +6,10 @@ fn solve(n: usize) -> Vec<Vec<usize>> {
     //
     let res = vec![vec![0; n]; n];
     let mut count = 0;
-    loop {
+    // loop {
 
-        for i in 
-    }
+    //     for i in
+    // }
 
     res
 }

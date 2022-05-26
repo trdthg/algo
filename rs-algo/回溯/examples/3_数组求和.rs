@@ -40,16 +40,7 @@ fn backtracing(nums: &Vec<i32>, current_sum: i32, start_index: usize, other: &mu
             std::cmp::Ordering::Greater => {}
         }
     }
-    // let mut l = start_index;
-    // let mut r = nums.len() - 1;
-    // while l < r {
-    //     if
-    // }
-    // println!("{}: af", current_sum);
     for i in start_index..nums.len() {
-        // if start_index == 1 {
-        //     println!("{i}: {:?}", other.path);
-        // }
         other.path.push(nums[i]);
         println!("{start_index}: {:?}", other.path);
         backtracing(nums, current_sum + nums[i], i + 1, other);
