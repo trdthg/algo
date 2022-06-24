@@ -4,3 +4,5 @@
 target
 39*
 *实验*
+.vscode
+*.sql
