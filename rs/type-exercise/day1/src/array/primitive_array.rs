@@ -3,7 +3,7 @@ use std::fmt::Debug;
 use bitvec::vec::BitVec;
 
 use super::iterator::ArrayIterator;
-use super::{Array, ArrayBuilder};
+use super::{Array, ArrayBuilder, ArrayImpl};
 use crate::scalar::{Scalar, ScalarRef};
 // pub trait PrimitiveType: Debug + Copy + Default + Send + Sync + 'static {}ault + Debug + 'static
 // {}
@@ -11,6 +11,9 @@ pub trait PrimitiveType: Copy + Send + Sync + Default + Debug + 'static {}
 
 pub type I32Array = PrimitiveArray<i32>;
 pub type F32Array = PrimitiveArray<f32>;
+
+pub type I32ArrayBuilder = PrimitiveArrayBuilder<i32>;
+pub type F32ArrayBuilder = PrimitiveArrayBuilder<f32>;
 
 impl PrimitiveType for i32 {}
 impl PrimitiveType for f32 {}
@@ -34,12 +37,14 @@ where
     T: Scalar<ArrayType = Self>,
     for<'a> T: ScalarRef<'a, ArrayType = Self, ScalarType = T>,
     for<'a> T: Scalar<RefType<'a> = T>,
+    Self: Into<ArrayImpl>,
+    Self: TryFrom<ArrayImpl>,
 {
-    type Builder = PrimitiveArrayBuilder<T>;
-
     type RefItem<'a> = T;
 
     type OwnedItem = T;
+
+    type Builder = PrimitiveArrayBuilder<T>;
 
     fn get(&self, idx: usize) -> Option<Self::RefItem<'_>> {
         if !self.bitmap[idx] {
@@ -67,6 +72,8 @@ where
     T: Scalar<ArrayType = PrimitiveArray<T>>,
     for<'a> T: ScalarRef<'a, ArrayType = PrimitiveArray<T>, ScalarType = T>,
     for<'a> T: Scalar<RefType<'a> = T>,
+    PrimitiveArray<T>: Into<ArrayImpl>,
+    PrimitiveArray<T>: TryFrom<ArrayImpl>,
 {
     type Array = PrimitiveArray<T>;
 

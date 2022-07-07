@@ -13,6 +13,17 @@ pub trait ScalarRef<'a>: Debug + Clone + Copy + Send + 'a {
     type ScalarType: Scalar<RefType<'a> = Self>;
     fn to_owned_scalar(&self) -> Self::ScalarType;
 }
+pub enum ScalarImpl {
+    Int32(i32),
+    Float32(f32),
+    String(String),
+}
+
+pub enum ScalarRefImpl<'a> {
+    Int32(i32),
+    Float32(f32),
+    String(&'a str),
+}
 
 impl Scalar for i32 {
     type ArrayType = I32Array;
