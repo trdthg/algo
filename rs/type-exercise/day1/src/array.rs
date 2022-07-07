@@ -4,14 +4,19 @@ mod iterator;
 mod primitive_array;
 mod string_array;
 
-use iterator::*;
-use primitive_array::*;
-use string_array::*;
+pub use iterator::*;
+pub use primitive_array::*;
+pub use string_array::*;
 
-pub trait Array: Send + Sync + Sized + 'static {
+use crate::scalar::Scalar;
+
+pub trait Array: Send + Sync + Sized + 'static
+where
+    for<'a> Self::OwnedItem: Scalar<RefType<'a> = Self::RefItem<'a>>,
+{
     type RefItem<'a>: Copy + Debug;
 
-    type OwnedItem: Debug;
+    type OwnedItem: Scalar<ArrayType = Self>;
 
     type Builder: ArrayBuilder<Array = Self>;
 

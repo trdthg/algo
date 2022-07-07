@@ -2,7 +2,7 @@ use bitvec::prelude::BitVec;
 
 use super::iterator::ArrayIterator;
 use super::{Array, ArrayBuilder};
-
+use crate::Scalar;
 /// 存储变长数据
 ///
 /// Vec<Option<String>> 需要创建一个 String 对象
@@ -17,9 +17,11 @@ pub struct StringArray {
 }
 
 impl Array for StringArray {
-    type RefItem<'a> = &'a str;
-    type OwnedItem = String;
     type Builder = StringArrayBuilder;
+
+    type OwnedItem = String;
+
+    type RefItem<'a> = &'a str;
 
     fn get(&self, idx: usize) -> Option<Self::RefItem<'_>> {
         if !self.bitmap[idx] {
@@ -81,11 +83,20 @@ impl ArrayBuilder for StringArrayBuilder {
     }
 }
 
+fn sql_func<'a, I: Array, O: Array>(i1: I::RefItem<'a>, i2: I::RefItem<'a>) -> O::OwnedItem {
+    todo!()
+}
+
 fn eval_binary<I: Array, O: Array>(i1: I, i2: I) -> O {
     assert_eq!(i1.len(), i2.len(), "size mismatch");
+
     let mut builder = O::Builder::with_capacity(i1.len());
+
     for (i1, i2) in i1.iter().zip(i2.iter()) {
-        //   builder.push(sql_func(i1, i2));
+        match (i1, i2) {
+            (Some(i1), Some(i2)) => builder.push(Some(sql_func::<I, O>(i1, i2).as_scalar_ref())),
+            _ => builder.push(None),
+        }
     }
     builder.finish()
 }

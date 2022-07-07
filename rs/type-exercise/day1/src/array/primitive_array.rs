@@ -4,6 +4,7 @@ use bitvec::vec::BitVec;
 
 use super::iterator::ArrayIterator;
 use super::{Array, ArrayBuilder};
+use crate::scalar::{Scalar, ScalarRef};
 // pub trait PrimitiveType: Debug + Copy + Default + Send + Sync + 'static {}ault + Debug + 'static
 // {}
 pub trait PrimitiveType: Copy + Send + Sync + Default + Debug + 'static {}
@@ -27,7 +28,13 @@ pub struct PrimitiveArray<T: PrimitiveType> {
     bitmap: BitVec,
 }
 
-impl<T: PrimitiveType> Array for PrimitiveArray<T> {
+impl<T> Array for PrimitiveArray<T>
+where
+    T: PrimitiveType,
+    T: Scalar<ArrayType = Self>,
+    for<'a> T: ScalarRef<'a, ArrayType = Self, ScalarType = T>,
+    for<'a> T: Scalar<RefType<'a> = T>,
+{
     type Builder = PrimitiveArrayBuilder<T>;
 
     type RefItem<'a> = T;
@@ -53,7 +60,14 @@ pub struct PrimitiveArrayBuilder<T: PrimitiveType> {
     data: Vec<T>,
     bitmap: BitVec,
 }
-impl<T: PrimitiveType> ArrayBuilder for PrimitiveArrayBuilder<T> {
+
+impl<T> ArrayBuilder for PrimitiveArrayBuilder<T>
+where
+    T: PrimitiveType,
+    T: Scalar<ArrayType = PrimitiveArray<T>>,
+    for<'a> T: ScalarRef<'a, ArrayType = PrimitiveArray<T>, ScalarType = T>,
+    for<'a> T: Scalar<RefType<'a> = T>,
+{
     type Array = PrimitiveArray<T>;
 
     fn with_capacity(capacity: usize) -> Self {
