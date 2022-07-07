@@ -2,8 +2,17 @@ use std::fmt::Debug;
 
 use bitvec::vec::BitVec;
 
+use super::iterator::ArrayIterator;
 use super::{Array, ArrayBuilder};
-pub trait PrimitiveType: Debug + Copy + Default + 'static {}
+// pub trait PrimitiveType: Debug + Copy + Default + Send + Sync + 'static {}ault + Debug + 'static
+// {}
+pub trait PrimitiveType: Copy + Send + Sync + Default + Debug + 'static {}
+
+pub type I32Array = PrimitiveArray<i32>;
+pub type F32Array = PrimitiveArray<f32>;
+
+impl PrimitiveType for i32 {}
+impl PrimitiveType for f32 {}
 /// 存储顶长数据
 ///
 /// data:    233abc
@@ -11,7 +20,6 @@ pub trait PrimitiveType: Debug + Copy + Default + 'static {}
 ///          |  |  |--|
 /// offsets: 0, 3, 6, 6
 /// bitmap: true, true, false
-#[derive()]
 pub struct PrimitiveArray<T: PrimitiveType> {
     /// 实际数据
     data: Vec<T>,
@@ -20,8 +28,11 @@ pub struct PrimitiveArray<T: PrimitiveType> {
 }
 
 impl<T: PrimitiveType> Array for PrimitiveArray<T> {
-    type RefItem<'a> = T;
     type Builder = PrimitiveArrayBuilder<T>;
+
+    type RefItem<'a> = T;
+
+    type OwnedItem = T;
 
     fn get(&self, idx: usize) -> Option<Self::RefItem<'_>> {
         if !self.bitmap[idx] {
@@ -31,6 +42,10 @@ impl<T: PrimitiveType> Array for PrimitiveArray<T> {
     }
     fn len(&self) -> usize {
         self.data.len()
+    }
+
+    fn iter(&self) -> super::iterator::ArrayIterator<Self> {
+        ArrayIterator::new(self)
     }
 }
 
