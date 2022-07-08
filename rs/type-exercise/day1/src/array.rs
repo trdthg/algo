@@ -1,9 +1,11 @@
 use std::fmt::Debug;
 
+mod impls;
 mod iterator;
 mod primitive_array;
 mod string_array;
 
+pub use impls::*;
 pub use iterator::*;
 pub use primitive_array::*;
 pub use string_array::*;
@@ -44,6 +46,26 @@ pub trait ArrayBuilder {
     fn finish(self) -> Self::Array;
 }
 
+pub enum ArrayImpl {
+    Int16(I16Array),
+    Int32(I32Array),
+    Int64(I64Array),
+    Float32(F32Array),
+    Float64(F64Array),
+    Bool(BoolArray),
+    String(StringArray),
+}
+
+pub enum ArrayBuilderImpl {
+    Int16(I16ArrayBuilder),
+    Int32(I32ArrayBuilder),
+    Int64(I64ArrayBuilder),
+    Float32(F32ArrayBuilder),
+    Float64(F64ArrayBuilder),
+    Bool(BoolArrayBuilder),
+    String(StringArrayBuilder),
+}
+
 fn eval_binary<I1: Array, I2: Array>(i1: &ArrayImpl, i2: &ArrayImpl) -> Result<ArrayImpl, ()>
 where
     for<'a> &'a I1: TryFrom<&'a ArrayImpl, Error = ()>,
@@ -53,69 +75,6 @@ where
     let i2: &I2 = i2.try_into()?;
     // some black magic
     todo!()
-}
-
-pub enum ArrayImpl {
-    Int32(I32Array),
-    Float32(F32Array),
-    String(StringArray),
-}
-
-impl TryFrom<ArrayImpl> for I32Array {
-    type Error = ();
-
-    fn try_from(value: ArrayImpl) -> Result<Self, Self::Error> {
-        match value {
-            ArrayImpl::Int32(value) => Ok(value),
-            _ => Err(()),
-        }
-    }
-}
-
-impl From<I32Array> for ArrayImpl {
-    fn from(v: I32Array) -> Self {
-        ArrayImpl::Int32(v)
-    }
-}
-
-impl TryFrom<ArrayImpl> for F32Array {
-    type Error = ();
-
-    fn try_from(value: ArrayImpl) -> Result<Self, Self::Error> {
-        match value {
-            ArrayImpl::Float32(value) => Ok(value),
-            _ => Err(()),
-        }
-    }
-}
-
-impl From<F32Array> for ArrayImpl {
-    fn from(v: F32Array) -> Self {
-        ArrayImpl::Float32(v)
-    }
-}
-
-impl TryFrom<ArrayImpl> for StringArray {
-    type Error = ();
-
-    fn try_from(value: ArrayImpl) -> Result<Self, Self::Error> {
-        match value {
-            ArrayImpl::String(value) => Ok(value),
-            _ => Err(()),
-        }
-    }
-}
-
-impl From<StringArray> for ArrayImpl {
-    fn from(v: StringArray) -> Self {
-        ArrayImpl::String(v)
-    }
-}
-
-impl ArrayImpl {
-    fn get(&self, idx: usize) -> Option<ScalarRefImpl<'_>> {
-        todo!()
-    }
 }
 
 #[cfg(test)]
