@@ -34,6 +34,14 @@ where
     }
 
     fn iter(&self) -> ArrayIterator<Self>;
+
+    fn from_slice(data: &[Option<Self::RefItem<'_>>]) -> Self {
+        let mut builder = Self::Builder::with_capacity(data.len());
+        for item in data {
+            builder.push(*item);
+        }
+        builder.finish()
+    }
 }
 
 pub trait ArrayBuilder {
@@ -64,17 +72,6 @@ pub enum ArrayBuilderImpl {
     Float64(F64ArrayBuilder),
     Bool(BoolArrayBuilder),
     String(StringArrayBuilder),
-}
-
-fn eval_binary<I1: Array, I2: Array>(i1: &ArrayImpl, i2: &ArrayImpl) -> Result<ArrayImpl, ()>
-where
-    for<'a> &'a I1: TryFrom<&'a ArrayImpl, Error = ()>,
-    for<'a> &'a I2: TryFrom<&'a ArrayImpl, Error = ()>,
-{
-    let i1: &I1 = i1.try_into()?;
-    let i2: &I2 = i2.try_into()?;
-    // some black magic
-    todo!()
 }
 
 #[cfg(test)]

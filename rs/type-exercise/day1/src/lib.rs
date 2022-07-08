@@ -3,9 +3,9 @@
 
 use scalar::Scalar;
 pub mod array;
-pub mod macros;
+pub mod expr;
+mod macros;
 pub mod scalar;
-
 use thiserror::Error;
 
 #[derive(Error, Debug)]
