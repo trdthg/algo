@@ -5,10 +5,21 @@ use std::marker::PhantomData;
 
 use anyhow::Result;
 
-use crate::array::{Array, ArrayBuilder, ArrayImpl};
+use crate::array::{Array, ArrayBuilder, ArrayImpl, BoolArray, I32Array, StringArray};
 use crate::scalar::Scalar;
 use crate::TypeMismatch;
 
+fn create_expression2<F>(
+) -> BinaryExpression<I32Array, I32Array, BoolArray, impl Fn(&str, &str) -> bool> {
+    BinaryExpression::<I32Array, I32Array, BoolArray, _>::new(
+        cmp::cmp_ge::<I32Array, I32Array, I32Array>,
+    )
+}
+
+fn create_expression(
+) -> BinaryExpression<StringArray, StringArray, BoolArray, impl Fn(&str, &str) -> bool> {
+    BinaryExpression::<StringArray, StringArray, BoolArray, _>::new(string::str_contains)
+}
 pub struct BinaryExpression<I1: Array, I2: Array, O: Array, F> {
     func: F,
     _phantom: PhantomData<(I1, I2, O)>,
