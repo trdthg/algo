@@ -10,7 +10,7 @@ pub use iterator::*;
 pub use primitive_array::*;
 pub use string_array::*;
 
-use crate::scalar::{Scalar, ScalarRefImpl};
+use crate::scalar::Scalar;
 
 pub trait Array: Send + Sync + Sized + 'static + TryFrom<ArrayImpl> + Into<ArrayImpl>
 where
@@ -77,6 +77,8 @@ pub enum ArrayBuilderImpl {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::TypeMismatch;
+
     // These are two examples of using generics over array.
     //
     // These functions work for all kinds of array, no matter fixed-length arrays like `I32Array`,
@@ -115,6 +117,43 @@ mod tests {
         check_array_eq(&array, &data[..]);
     }
 
+    fn add_i32(i1: i32, i2: i32) -> i32 {
+        i1 + i2
+    }
+
+    fn add_i32_vec(i1: I32Array, i2: I32Array) -> I32Array {
+        let mut builder = I32ArrayBuilder::with_capacity(i1.len());
+        for (a, b) in i1.iter().zip(i2.iter()) {
+            builder.push(a.and_then(|a| b.map(|b| add_i32(a, b))));
+        }
+        builder.finish()
+    }
+
+    fn add_i32_wrapper(i1: ArrayImpl, i2: ArrayImpl) -> Result<ArrayImpl, TypeMismatch> {
+        Ok(add_i32_vec(i1.try_into()?, i2.try_into()?).into())
+    }
+
     #[test]
-    fn test() {}
+    fn test_add_array() {
+        check_array_eq::<I32Array>(
+            &add_i32_wrapper(
+                I32Array::from_slice(&[Some(1), Some(2), Some(3), None]).into(),
+                I32Array::from_slice(&[Some(1), Some(2), None, Some(4)]).into(),
+            )
+            .unwrap()
+            .try_into()
+            .unwrap(),
+            &[Some(2), Some(4), None, None],
+        );
+
+        let result = add_i32_wrapper(
+            StringArray::from_slice(&[Some("1"), Some("2"), Some("3"), None]).into(),
+            I32Array::from_slice(&[Some(1), Some(2), None, Some(4)]).into(),
+        );
+        assert!(result.is_err());
+        if let Err(err) = result {
+            assert_eq!(err.0, "Int32");
+            assert_eq!(err.1, "String");
+        }
+    }
 }

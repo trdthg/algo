@@ -106,6 +106,18 @@ macro_rules! impl_scalar {
                 fn as_scalar_ref(&self) -> $Owned {
                     *self
                 }
+
+                fn upcast_gat<'short, 'long: 'short>(long: Self::RefType<'long>) -> Self::RefType<'short> {
+                    long
+                }
+
+                fn cast_s_to_a<'a>(item: Self::RefType<'a>) -> <Self::ArrayType as Array>::RefItem<'a> {
+                    item
+                }
+
+                fn cast_a_to_s<'x>(item: <Self::ArrayType as Array>::RefItem<'x>) -> Self::RefType<'x> {
+                    item
+                }
             }
 
             #[doc = concat!(
@@ -192,6 +204,18 @@ impl Scalar for String {
 
     fn as_scalar_ref(&self) -> Self::RefType<'_> {
         self.as_ref()
+    }
+
+    fn upcast_gat<'short, 'long: 'short>(long: Self::RefType<'long>) -> Self::RefType<'short> {
+        long
+    }
+
+    fn cast_s_to_a<'a>(item: Self::RefType<'a>) -> <Self::ArrayType as Array>::RefItem<'a> {
+        item
+    }
+
+    fn cast_a_to_s<'x>(item: <Self::ArrayType as Array>::RefItem<'x>) -> Self::RefType<'x> {
+        item
     }
 }
 
