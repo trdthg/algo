@@ -62,6 +62,7 @@ pub enum ArrayImpl {
     Float64(F64Array),
     Bool(BoolArray),
     String(StringArray),
+    Decimal(DecimalArray),
 }
 
 pub enum ArrayBuilderImpl {
@@ -72,6 +73,7 @@ pub enum ArrayBuilderImpl {
     Float64(F64ArrayBuilder),
     Bool(BoolArrayBuilder),
     String(StringArrayBuilder),
+    Decimal(DecimalArrayBuilder),
 }
 
 #[cfg(test)]

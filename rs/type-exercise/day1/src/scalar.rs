@@ -2,6 +2,7 @@ use std::fmt::Debug;
 
 mod impls;
 pub use impls::*;
+use rust_decimal::Decimal;
 
 use crate::array::Array;
 
@@ -29,6 +30,7 @@ pub enum ScalarImpl {
     Float64(f64),
     String(String),
     Bool(bool),
+    Decimal(Decimal),
 }
 
 #[derive(Debug, PartialEq, Clone, Copy)]
@@ -40,6 +42,7 @@ pub enum ScalarRefImpl<'a> {
     Float64(f64),
     String(&'a str),
     Bool(bool),
+    Decimal(Decimal),
 }
 
 #[cfg(test)]

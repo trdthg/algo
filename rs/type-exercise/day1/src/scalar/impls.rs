@@ -4,6 +4,8 @@
 
 //! Contains all macro-generated implementations of scalar methods
 
+use rust_decimal::Decimal;
+
 use crate::array::*;
 use crate::macros::{for_all_primitive_variants, for_all_variants};
 use crate::scalar::*;
@@ -107,16 +109,18 @@ macro_rules! impl_scalar {
                     *self
                 }
 
-                fn upcast_gat<'short, 'long: 'short>(long: Self::RefType<'long>) -> Self::RefType<'short> {
-                    long
-                }
-
-                fn cast_s_to_a<'a>(item: Self::RefType<'a>) -> <Self::ArrayType as Array>::RefItem<'a> {
+                #[allow(clippy::needless_lifetimes)]
+                fn cast_s_to_a<'x>(item: Self::RefType<'x>) -> <Self::ArrayType as Array>::RefItem<'x> {
                     item
                 }
 
+                #[allow(clippy::needless_lifetimes)]
                 fn cast_a_to_s<'x>(item: <Self::ArrayType as Array>::RefItem<'x>) -> Self::RefType<'x> {
                     item
+                }
+
+                fn upcast_gat<'short, 'long: 'short>(long: $Owned) -> $Owned {
+                    long
                 }
             }
 
@@ -137,94 +141,36 @@ macro_rules! impl_scalar {
 
 for_all_primitive_variants! { impl_scalar }
 
-// /// Implement [`Scalar`] for `String`.
-// impl Scalar for String {
-//     type ArrayType = StringArray;
-//     type RefType<'a> = &'a str;
-
-//     fn as_scalar_ref(&self) -> &str {
-//         self.as_str()
-//     }
-// }
-
-// /// Implement [`ScalarRef`] for `&str`.
-// impl<'a> ScalarRef<'a> for &'a str {
-//     type ArrayType = StringArray;
-//     type ScalarType = String;
-
-//     fn to_owned_scalar(&self) -> String {
-//         self.to_string()
-//     }
-// }
-
-// impl Scalar for i32 {
-//     type ArrayType = I32Array;
-
-//     type RefType<'a> = i32;
-
-//     fn as_scalar_ref(&self) -> Self::RefType<'_> {
-//         *self
-//     }
-// }
-
-// impl Scalar for f32 {
-//     type ArrayType = F32Array;
-
-//     type RefType<'a> = f32;
-
-//     fn as_scalar_ref(&self) -> Self::RefType<'_> {
-//         *self
-//     }
-// }
-
-// impl<'a> ScalarRef<'a> for i32 {
-//     type ArrayType = I32Array;
-
-//     type ScalarType = i32;
-
-//     fn to_owned_scalar(&self) -> Self::ScalarType {
-//         *self
-//     }
-// }
-
-// impl<'a> ScalarRef<'a> for f32 {
-//     type ArrayType = F32Array;
-
-//     type ScalarType = f32;
-
-//     fn to_owned_scalar(&self) -> Self::ScalarType {
-//         *self
-//     }
-// }
-
+/// Implement [`Scalar`] for `String`.
 impl Scalar for String {
     type ArrayType = StringArray;
-
     type RefType<'a> = &'a str;
 
-    fn as_scalar_ref(&self) -> Self::RefType<'_> {
-        self.as_ref()
+    fn as_scalar_ref(&self) -> &str {
+        self.as_str()
     }
 
-    fn upcast_gat<'short, 'long: 'short>(long: Self::RefType<'long>) -> Self::RefType<'short> {
-        long
-    }
-
-    fn cast_s_to_a<'a>(item: Self::RefType<'a>) -> <Self::ArrayType as Array>::RefItem<'a> {
+    #[allow(clippy::needless_lifetimes)]
+    fn cast_s_to_a<'x>(item: Self::RefType<'x>) -> <Self::ArrayType as Array>::RefItem<'x> {
         item
     }
 
+    #[allow(clippy::needless_lifetimes)]
     fn cast_a_to_s<'x>(item: <Self::ArrayType as Array>::RefItem<'x>) -> Self::RefType<'x> {
         item
     }
+
+    fn upcast_gat<'short, 'long: 'short>(long: &'long str) -> &'short str {
+        long
+    }
 }
 
+/// Implement [`ScalarRef`] for `&str`.
 impl<'a> ScalarRef<'a> for &'a str {
     type ArrayType = StringArray;
-
     type ScalarType = String;
 
-    fn to_owned_scalar(&self) -> Self::ScalarType {
+    fn to_owned_scalar(&self) -> String {
         self.to_string()
     }
 }

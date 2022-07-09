@@ -2,7 +2,7 @@ use std::marker::PhantomData;
 
 use anyhow::Result;
 
-use super::{cmp, string};
+use super::{cmp, string, Expression};
 use crate::array::*;
 use crate::scalar::Scalar;
 use crate::TypeMismatch;
@@ -12,6 +12,8 @@ pub trait BinaryExprFunc<A: Scalar, B: Scalar, O: Scalar> {
 
 impl<A: Scalar, B: Scalar, O: Scalar, F> BinaryExprFunc<A, B, O> for F
 where
+    for<'a> &'a A::ArrayType: TryFrom<&'a ArrayImpl, Error = TypeMismatch>,
+    for<'a> &'a B::ArrayType: TryFrom<&'a ArrayImpl, Error = TypeMismatch>,
     F: Fn(A::RefType<'_>, B::RefType<'_>) -> O,
 {
     fn eval(&self, i1: A::RefType<'_>, i2: B::RefType<'_>) -> O {
@@ -35,6 +37,17 @@ where
 pub struct BinaryExpression<I1: Scalar, I2: Scalar, O: Scalar, F> {
     func: F,
     _phantom: PhantomData<(I1, I2, O)>,
+}
+
+impl<A: Scalar, B: Scalar, O: Scalar, F> Expression for BinaryExpression<A, B, O, F>
+where
+    for<'a> &'a A::ArrayType: TryFrom<&'a ArrayImpl, Error = TypeMismatch>,
+    for<'a> &'a B::ArrayType: TryFrom<&'a ArrayImpl, Error = TypeMismatch>,
+    F: BinaryExprFunc<A, B, O>,
+{
+    fn eval_expr(&self, data: &[&ArrayImpl]) -> Result<ArrayImpl> {
+        self.eval_batch(data[0], data[1])
+    }
 }
 
 impl<I1: Scalar, I2: Scalar, O: Scalar, F> BinaryExpression<I1, I2, O, F>

@@ -3,6 +3,7 @@
 
 use scalar::Scalar;
 pub mod array;
+mod datatype;
 pub mod expr;
 mod macros;
 pub mod scalar;
