@@ -19,6 +19,8 @@ pub trait ScalarRef<'a>: Debug + Clone + Copy + Send + 'a {
     type ScalarType: Scalar<RefType<'a> = Self>;
     fn to_owned_scalar(&self) -> Self::ScalarType;
 }
+
+#[derive(Debug, PartialEq, Clone)]
 pub enum ScalarImpl {
     Int16(i16),
     Int32(i32),
@@ -29,6 +31,7 @@ pub enum ScalarImpl {
     Bool(bool),
 }
 
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum ScalarRefImpl<'a> {
     Int16(i16),
     Int32(i32),

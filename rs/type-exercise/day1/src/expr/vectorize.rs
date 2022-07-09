@@ -41,7 +41,7 @@ impl<I1: Scalar, I2: Scalar, O: Scalar, F> BinaryExpression<I1, I2, O, F>
 where
     for<'a> &'a I1::ArrayType: TryFrom<&'a ArrayImpl, Error = TypeMismatch>,
     for<'a> &'a I2::ArrayType: TryFrom<&'a ArrayImpl, Error = TypeMismatch>,
-    for<'a> F: BinaryExprFunc<I1, I2, O>,
+    F: BinaryExprFunc<I1, I2, O>,
     // for<'a> I1::ArrayType: Array<RefItem<'a> = O::RefType<'a>>,
     // for<'a> I2::ArrayType: Array<RefItem<'a> = O::RefType<'a>>,
     // for<'a> O::ArrayType: Array<RefItem<'a> = O::RefType<'a>>,
@@ -72,7 +72,6 @@ where
         Ok(builder.finish().into())
     }
 }
-
 
 #[cfg(test)]
 mod tests {
